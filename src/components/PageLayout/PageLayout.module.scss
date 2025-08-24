@@ -1,0 +1,52 @@
+.loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #b8a0d4, #d4c5e8, #9b82c7, #b8a0d4);
+  animation: gradient-spin 1s linear infinite;
+  position: relative;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: white;
+  border-radius: 50%;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $theme-primary-color;
+  font-size: 1.6rem;
+  gap: 1.6rem;
+}
+
+.cta {
+  display: flex;
+  padding: 0.8rem 1.6rem;
+  height: fit-content;
+  background-color: $theme-primary-color;
+  color: $theme-secondary-color;
+  border-radius: 0.8rem;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@keyframes gradient-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

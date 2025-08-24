@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2.4rem;
+  height: 100%;
+  gap: 2.4rem;
+}
+
+.headContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats {
+  display: flex;
+  gap: 2.4rem;
+}
+
+.name {
+  font-size: 3.2rem;
+}
+
+.headingContainer {
+  display: flex;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  padding: 2.4rem;
+  font-weight: bold;
+  background-color: $theme-primary-color;
+  color: $theme-secondary-color;
+  border-radius: 0.8rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 33%;
+  height: 20rem;
+  border-radius: 0.8rem;
+  font-size: 10rem;
+}
+
+.statCard:nth-child(even) {
+  background-color: $theme-primary-color;
+  color: white;
+}
+
+.statCard:nth-child(odd) {
+  color: $theme-primary-color;
+  border: 0.1rem solid $theme-primary-color;
+}
+
+.languageCard {
+  border: 0.1rem solid $theme-primary-color;
+  border-radius: 0.8rem;
+  padding: 1.6rem;
+  color: $theme-primary-color;
+  font-size: 1.6rem;
+}
+
+.statCardSubtext {
+  font-size: 1.6rem;
+}
+
+.viewRepositoryCta {
+  display: flex;
+  padding: 0.8rem 1.6rem;
+  height: fit-content;
+  background-color: $theme-secondary-color;
+  color: $theme-primary-color;
+  border-radius: 0.8rem;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
