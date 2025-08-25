@@ -1,6 +1,6 @@
 .loader {
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
   background: conic-gradient(from 0deg, #b8a0d4, #d4c5e8, #9b82c7, #b8a0d4);
   animation: gradient-spin 1s linear infinite;
@@ -10,10 +10,10 @@
 .loader::before {
   content: "";
   position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
+  top: 0.4rem;
+  left: 0.4rem;
+  right: 0.4rem;
+  bottom: 0.4rem;
   background: white;
   border-radius: 50%;
 }
