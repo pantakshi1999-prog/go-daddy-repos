@@ -1,50 +1,54 @@
-
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest'; 
-import { useApi } from '../../hooks/useApi';
-
-import Repository from './Repositories';
+import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
+import { useApi } from '@go-daddy-repo/hooks/useApi';
+
+import Repositories from './Repositories';
+
 vi.mock('../../api/repositories', () => ({
-  getRepositoryData: vi.fn(),
+  getRepositories: vi.fn(),
 }));
 
 vi.mock('../../hooks/useApi', () => ({
   useApi: vi.fn(),
 }));
 
-const mockWindowOpen = vi.fn();
-Object.defineProperty(window, 'open', {
-  writable: true,
-  value: mockWindowOpen,
-});
-
-const mockRepositoryData = {
-  name: 'react',
-  description: 'A JavaScript library for building user interfaces',
-  language: 'JavaScript',
-  watchers: 1500,
-  forks: 300,
-  open_issues_count: 50,
-  svn_url: 'https://github.com/facebook/react',
-};
-
-const renderWithRouter = (component, initialEntries = ['/']) => {
+const renderWithRouter = (component) => {
   return render(
-    <BrowserRouter initialEntries={initialEntries}>
+    <BrowserRouter>
       {component}
     </BrowserRouter>
   );
 };
 
-describe('Repository Component', () => {
+const mockRepositoriesData = [
+  {
+    name: 'react',
+    language: 'JavaScript',
+    forks: 42000,
+    watchers: 220000,
+  },
+  {
+    name: 'vue',
+    language: 'TypeScript',
+    forks: 34000,
+    watchers: 207000,
+  },
+  {
+    name: 'angular',
+    language: 'TypeScript',
+    forks: 25000,
+    watchers: 94000,
+  },
+];
+
+describe('Repositories Component', () => {
   const mockExecute = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockWindowOpen.mockClear();
   });
 
   describe('Loading State', () => {
@@ -56,16 +60,15 @@ describe('Repository Component', () => {
         execute: mockExecute,
       });
 
-      renderWithRouter(<Repository />);
+      renderWithRouter(<Repositories />);
 
       expect(screen.getByTestId('loader')).toBeInTheDocument();
-      expect(screen.queryByText('react')).not.toBeInTheDocument();
     });
   });
 
   describe('Error State', () => {
     it('shows error message when API call fails', () => {
-      const mockError = new Error('Failed to fetch repository');
+      const mockError = new Error('Failed to fetch repositories');
       useApi.mockReturnValue({
         data: null,
         isLoading: false,
@@ -73,7 +76,7 @@ describe('Repository Component', () => {
         execute: mockExecute,
       });
 
-      renderWithRouter(<Repository />);
+      renderWithRouter(<Repositories />);
 
       expect(screen.getByText('Sorry something went wrong !')).toBeInTheDocument();
       expect(screen.getByText('Please Try Again')).toBeInTheDocument();
@@ -81,7 +84,7 @@ describe('Repository Component', () => {
 
     it('calls execute when retry button is clicked', async () => {
       const user = userEvent.setup();
-      const mockError = new Error('Failed to fetch repository');
+      const mockError = new Error('Failed to fetch repositories');
       useApi.mockReturnValue({
         data: null,
         isLoading: false,
@@ -89,7 +92,7 @@ describe('Repository Component', () => {
         execute: mockExecute,
       });
 
-      renderWithRouter(<Repository />);
+      renderWithRouter(<Repositories />);
 
       const retryButton = screen.getByText('Please Try Again');
       await user.click(retryButton);
@@ -101,89 +104,74 @@ describe('Repository Component', () => {
   describe('Success State', () => {
     beforeEach(() => {
       useApi.mockReturnValue({
-        data: mockRepositoryData,
+        data: mockRepositoriesData,
         isLoading: false,
         error: null,
         execute: mockExecute,
       });
     });
 
-    it('renders repository information correctly', () => {
-      renderWithRouter(<Repository />);
+    it('renders banner with correct title and description', () => {
+      renderWithRouter(<Repositories />);
 
-      expect(screen.getByText('react')).toBeInTheDocument();
-      expect(screen.getByText('A JavaScript library for building user interfaces')).toBeInTheDocument();
-      expect(screen.getByText('Language: JavaScript')).toBeInTheDocument();
+      expect(screen.getByText('Repo - List')).toBeInTheDocument();
+      expect(screen.getByText('All your repositories listed at a place !')).toBeInTheDocument();
     });
 
-    it('displays repository statistics', () => {
-      renderWithRouter(<Repository />);
+    it('renders table headers correctly', () => {
+      renderWithRouter(<Repositories />);
 
-      expect(screen.getByText('1500')).toBeInTheDocument();
-      expect(screen.getByText('300')).toBeInTheDocument();
-      expect(screen.getByText('50')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Language')).toBeInTheDocument();
+      expect(screen.getByText('Forks')).toBeInTheDocument();
+      expect(screen.getByText('Watchers')).toBeInTheDocument();
     });
 
-    it('renders View Repository button', () => {
-      renderWithRouter(<Repository />);
-      const viewButton = screen.getByText('View Repository');
-      expect(viewButton).toBeInTheDocument();
+    it('renders all repository cards', () => {
+      renderWithRouter(<Repositories />);
+
+      const repositoryCards = screen.getAllByTestId('repository-card');
+      expect(repositoryCards).toHaveLength(3);
     });
 
-    it('opens repository URL when View Repository button is clicked', async () => {
-      const user = userEvent.setup();
-      renderWithRouter(<Repository />);
-
-      const viewButton = screen.getByText('View Repository');
-      await user.click(viewButton);
-
-      expect(mockWindowOpen).toHaveBeenCalledWith('https://github.com/facebook/react');
-    });
-
-    it('does not shows the components for the fields that are not present', () => {
-      const incompleteData = {
-        name: 'incomplete-repo',
-        watchers: 10,
-        forks: 5,
-        open_issues_count: 2,
-        svn_url: 'https://github.com/test/incomplete',
-      };
-
+    it('does not show repository cards when data is null', () => {
       useApi.mockReturnValue({
-        data: incompleteData,
+        data: null,
         isLoading: false,
         error: null,
         execute: mockExecute,
       });
 
-      renderWithRouter(<Repository />);
+      renderWithRouter(<Repositories />);
 
-      expect(screen.getByText('incomplete-repo')).toBeInTheDocument();
-      expect(screen.queryByText('Language:')).not.toBeInTheDocument();
+      expect(screen.getByText('Repo - List')).toBeInTheDocument();
+      expect(screen.queryAllByTestId('repository-card')).toHaveLength(0);
     });
   });
 
   describe('Edge Cases', () => {
-    it('handles missing svn_url gracefully', async () => {
-      const user = userEvent.setup();
-      const dataWithoutUrl = {
-        ...mockRepositoryData,
-        svn_url: undefined,
-      };
+    it('handles repositories with missing properties gracefully', () => {
+      const incompleteRepositories = [
+        {
+          name: 'incomplete-repo-1',
+          language: 'JavaScript',
+        },
+        {
+          name: 'incomplete-repo-2',
+        },
+      ];
 
       useApi.mockReturnValue({
-        data: dataWithoutUrl,
+        data: incompleteRepositories,
         isLoading: false,
         error: null,
         execute: mockExecute,
       });
 
-      renderWithRouter(<Repository />);
+      renderWithRouter(<Repositories />);
 
-      const viewButton = screen.getByText('View Repository');
-      await user.click(viewButton);
-
-      expect(mockWindowOpen).toHaveBeenCalledWith(undefined);
+      const repositoryCards = screen.getAllByTestId('repository-card');
+      expect(repositoryCards).toHaveLength(2);
     });
   });
 });

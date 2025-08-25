@@ -1,11 +1,12 @@
-import { BrowserRouter } from 'react-router-dom';
+
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest'; 
 
-import { useApi } from '/hooks/useApi';
+import { useApi } from '@go-daddy-repo/hooks/useApi';
 
 import Repository from './Repository';
+import { BrowserRouter } from 'react-router-dom';
 
 vi.mock('../../api/repositories', () => ({
   getRepositoryData: vi.fn(),
