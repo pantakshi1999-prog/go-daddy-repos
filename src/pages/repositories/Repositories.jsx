@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { getRepositories } from "@go-daddy-repo/api/repositories";
+import { TABLE_HEADERS } from "./constants";
 import { useApi } from "@go-daddy-repo/hooks/useApi";
 
 import PageLayout from "@go-daddy-repo/components/PageLayout";
@@ -15,7 +16,7 @@ function Repositories() {
     error,
     execute,
   } = useApi(getRepositories);
-  const tableHeaders = ["Name", "Language", "Forks", "Watchers"];
+
   useEffect(() => {
     execute({});
   }, [execute]);
@@ -30,7 +31,7 @@ function Repositories() {
       </div>
       <div className={styles.container}>
         <div className={styles.headerRow}>
-          {tableHeaders.map((tableHeader, index) => (
+          {TABLE_HEADERS.map((tableHeader, index) => (
             <div className={styles.headerRowTopic} key={index}>{tableHeader}</div>
           ))}
         </div>
