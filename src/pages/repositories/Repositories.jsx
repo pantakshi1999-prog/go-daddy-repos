@@ -32,12 +32,14 @@ function Repositories() {
       <div className={styles.container}>
         <div className={styles.headerRow}>
           {TABLE_HEADERS.map((tableHeader, index) => (
-            <div className={styles.headerRowTopic} key={index}>{tableHeader}</div>
+            <div className={styles.headerRowTopic} key={index}>
+              {tableHeader}
+            </div>
           ))}
         </div>
         <div className={styles.tableDataContainer}>
           {repositories?.map((data, index) => (
-            <RepositoryCard {...data} key={index}/>
+            <RepositoryCard {...data} key={index} />
           ))}
         </div>
       </div>

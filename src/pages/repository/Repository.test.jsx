@@ -1,46 +1,46 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest'; 
+import { useApi } from "@go-daddy-repo/hooks/useApi";
 
-import { useApi } from '@go-daddy-repo/hooks/useApi';
+import Repository from "./Repository";
+import { BrowserRouter } from "react-router-dom";
 
-import Repository from './Repository';
-import { BrowserRouter } from 'react-router-dom';
-
-vi.mock('../../api/repositories', () => ({
+vi.mock("../../api/repositories", () => ({
   getRepositoryData: vi.fn(),
 }));
 
-vi.mock('../../hooks/useApi', () => ({
+vi.mock("../../hooks/useApi", () => ({
   useApi: vi.fn(),
 }));
 
 const mockWindowOpen = vi.fn();
-Object.defineProperty(window, 'open', {
+Object.defineProperty(window, "open", {
   writable: true,
   value: mockWindowOpen,
 });
 
 const mockRepositoryData = {
-  name: 'react',
-  description: 'A JavaScript library for building user interfaces',
-  language: 'JavaScript',
+  name: "react",
+  description: "A JavaScript library for building user interfaces",
+  language: "JavaScript",
   watchers: 1500,
   forks: 300,
   open_issues_count: 50,
-  svn_url: 'https://github.com/facebook/react',
+  svn_url: "https://github.com/facebook/react",
 };
 
-const renderWithRouter = (component, initialEntries = ['/repository/facebook/react']) => {
+const renderWithRouter = (
+  component,
+  initialEntries = ["/repository/facebook/react"],
+) => {
   return render(
-    <BrowserRouter initialEntries={initialEntries}>
-      {component}
-    </BrowserRouter>
+    <BrowserRouter initialEntries={initialEntries}>{component}</BrowserRouter>,
   );
 };
 
-describe('Repository Component', () => {
+describe("Repository Component", () => {
   const mockExecute = vi.fn();
 
   beforeEach(() => {
@@ -48,8 +48,8 @@ describe('Repository Component', () => {
     mockWindowOpen.mockClear();
   });
 
-  describe('Loading State', () => {
-    it('shows loading spinner when data is being fetched', () => {
+  describe("Loading State", () => {
+    it("shows loading spinner when data is being fetched", () => {
       useApi.mockReturnValue({
         data: null,
         isLoading: true,
@@ -59,14 +59,14 @@ describe('Repository Component', () => {
 
       renderWithRouter(<Repository />);
 
-      expect(screen.getByTestId('loader')).toBeInTheDocument();
-      expect(screen.queryByText('react')).not.toBeInTheDocument();
+      expect(screen.getByTestId("loader")).toBeInTheDocument();
+      expect(screen.queryByText("react")).not.toBeInTheDocument();
     });
   });
 
-  describe('Error State', () => {
-    it('shows error message when API call fails', () => {
-      const mockError = new Error('Failed to fetch repository');
+  describe("Error State", () => {
+    it("shows error message when API call fails", () => {
+      const mockError = new Error("Failed to fetch repository");
       useApi.mockReturnValue({
         data: null,
         isLoading: false,
@@ -76,13 +76,15 @@ describe('Repository Component', () => {
 
       renderWithRouter(<Repository />);
 
-      expect(screen.getByText('Sorry something went wrong !')).toBeInTheDocument();
-      expect(screen.getByText('Please Try Again')).toBeInTheDocument();
+      expect(
+        screen.getByText("Sorry something went wrong !"),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Please Try Again")).toBeInTheDocument();
     });
 
-    it('calls execute when retry button is clicked', async () => {
+    it("calls execute when retry button is clicked", async () => {
       const user = userEvent.setup();
-      const mockError = new Error('Failed to fetch repository');
+      const mockError = new Error("Failed to fetch repository");
       useApi.mockReturnValue({
         data: null,
         isLoading: false,
@@ -92,14 +94,14 @@ describe('Repository Component', () => {
 
       renderWithRouter(<Repository />);
 
-      const retryButton = screen.getByText('Please Try Again');
+      const retryButton = screen.getByText("Please Try Again");
       await user.click(retryButton);
 
       expect(mockExecute).toHaveBeenCalled();
     });
   });
 
-  describe('Success State', () => {
+  describe("Success State", () => {
     beforeEach(() => {
       useApi.mockReturnValue({
         data: mockRepositoryData,
@@ -109,45 +111,49 @@ describe('Repository Component', () => {
       });
     });
 
-    it('renders repository information correctly', () => {
+    it("renders repository information correctly", () => {
       renderWithRouter(<Repository />);
 
-      expect(screen.getByText('react')).toBeInTheDocument();
-      expect(screen.getByText('A JavaScript library for building user interfaces')).toBeInTheDocument();
-      expect(screen.getByText('Language: JavaScript')).toBeInTheDocument();
+      expect(screen.getByText("react")).toBeInTheDocument();
+      expect(
+        screen.getByText("A JavaScript library for building user interfaces"),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Language: JavaScript")).toBeInTheDocument();
     });
 
-    it('displays repository statistics', () => {
+    it("displays repository statistics", () => {
       renderWithRouter(<Repository />);
 
-      expect(screen.getByText('1500')).toBeInTheDocument();
-      expect(screen.getByText('300')).toBeInTheDocument();
-      expect(screen.getByText('50')).toBeInTheDocument();
+      expect(screen.getByText("1500")).toBeInTheDocument();
+      expect(screen.getByText("300")).toBeInTheDocument();
+      expect(screen.getByText("50")).toBeInTheDocument();
     });
 
-    it('renders View Repository button', () => {
+    it("renders View Repository button", () => {
       renderWithRouter(<Repository />);
-      const viewButton = screen.getByText('View Repository');
+      const viewButton = screen.getByText("View Repository");
       expect(viewButton).toBeInTheDocument();
     });
 
-    it('opens repository URL when View Repository button is clicked', async () => {
+    it("opens repository URL when View Repository button is clicked", async () => {
       const user = userEvent.setup();
       renderWithRouter(<Repository />);
 
-      const viewButton = screen.getByText('View Repository');
+      const viewButton = screen.getByText("View Repository");
       await user.click(viewButton);
 
-      expect(mockWindowOpen).toHaveBeenCalledWith('https://github.com/facebook/react');
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        "https://github.com/facebook/react",
+      );
     });
 
-    it('does not shows the components for the fields that are not present', () => {
+    it("does not shows the components for the fields that are not present", () => {
       const incompleteData = {
-        name: 'incomplete-repo',
+        name: "incomplete-repo",
         watchers: 10,
         forks: 5,
         open_issues_count: 2,
-        svn_url: 'https://github.com/test/incomplete',
+        svn_url: "https://github.com/test/incomplete",
       };
 
       useApi.mockReturnValue({
@@ -159,13 +165,13 @@ describe('Repository Component', () => {
 
       renderWithRouter(<Repository />);
 
-      expect(screen.getByText('incomplete-repo')).toBeInTheDocument();
-      expect(screen.queryByText('Language:')).not.toBeInTheDocument();
+      expect(screen.getByText("incomplete-repo")).toBeInTheDocument();
+      expect(screen.queryByText("Language:")).not.toBeInTheDocument();
     });
   });
 
-  describe('Edge Cases', () => {
-    it('handles missing svn_url gracefully', async () => {
+  describe("Edge Cases", () => {
+    it("handles missing svn_url gracefully", async () => {
       const user = userEvent.setup();
       const dataWithoutUrl = {
         ...mockRepositoryData,
@@ -181,7 +187,7 @@ describe('Repository Component', () => {
 
       renderWithRouter(<Repository />);
 
-      const viewButton = screen.getByText('View Repository');
+      const viewButton = screen.getByText("View Repository");
       await user.click(viewButton);
 
       expect(mockWindowOpen).toHaveBeenCalledWith(undefined);
