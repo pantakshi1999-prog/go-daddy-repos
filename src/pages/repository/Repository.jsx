@@ -53,7 +53,7 @@ function Repository() {
         </div>
               <div className={styles.stats}>
                 { 
-                      watchers && (
+                      typeof watchers === "number" && (
                         <div className={styles.statCard}>
                           <div>{watchers}</div>
                           <div className={styles.statCardSubtext}>Watchers</div>
@@ -61,7 +61,7 @@ function Repository() {
                       )
                   }
                   { 
-                      forks && (
+                      typeof forks === "number" && (
                           <div className={styles.statCard}>
             <div>{forks}</div>
             <div className={styles.statCardSubtext}>Forks</div>
@@ -69,7 +69,7 @@ function Repository() {
                       )
                   }
                   { 
-                      open_issues_count && (
+                      typeof open_issues_count === "number" && (
                            <div className={styles.statCard}>
             <div>{open_issues_count}</div>
             <div className={styles.statCardSubtext}>Open Issues</div>
