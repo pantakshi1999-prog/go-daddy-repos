@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from "react";
-
-import { getRepositoryData } from "../../api/repositories";
 import { useParams } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
 
-import PageLayout from "../../components/PageLayout";
+import { getRepositoryData } from "@go-daddy-repo/api/repositories";
+import { useApi } from "@go-daddy-repo/hooks/useApi";
+
+import PageLayout from "@go-daddy-repo/components/PageLayout";
 
 import styles from "./repository.module.scss";
 

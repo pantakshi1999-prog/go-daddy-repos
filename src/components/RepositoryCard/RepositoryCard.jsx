@@ -1,5 +1,6 @@
-import styles from "./repositoryCard.module.scss";
 import { useNavigate } from "react-router-dom";
+
+import styles from "./repositoryCard.module.scss";
 
 function RepositoryCard({ forks, watchers, language, name }) {
   const navigate = useNavigate();

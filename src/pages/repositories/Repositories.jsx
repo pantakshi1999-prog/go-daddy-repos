@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 
-import { getRepositories } from "../../api/repositories";
-import { useApi } from "../../hooks/useApi";
+import { getRepositories } from "@go-daddy-repo/api/repositories";
+import { useApi } from "@go-daddy-repo/hooks/useApi";
 
-import PageLayout from "../../components/PageLayout";
-import RepositoryCard from "../../components/RepositoryCard";
+import PageLayout from "@go-daddy-repo/components/PageLayout";
+import RepositoryCard from "@go-daddy-repo/components/RepositoryCard";
 
 import styles from "./repositories.module.scss";
 

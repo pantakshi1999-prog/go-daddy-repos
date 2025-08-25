@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Repositories from "./pages/repositories/Repositories";
-import Repository from "./pages/repository/Repository";
+import Repositories from "./pages/repositories";
+import Repository from "./pages/repository";
 
 function App() {
   return (

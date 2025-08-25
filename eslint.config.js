@@ -48,9 +48,7 @@ export default [
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
-      ],
-      
-      // Disable formatting rules (let Prettier handle them)
+      ],      
       'indent': 'off',
       'quotes': 'off',
       'semi': 'off',
@@ -65,7 +63,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest, // Add Jest globals
+        ...globals.jest,
       },
     },
   },
