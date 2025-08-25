@@ -17,6 +17,11 @@
     color: white;
     font-weight: 600;
   }
+
+  @include mobile-only {
+    font-size: 1rem;
+    padding: 1rem;
+  }
 }
 
 .cardSegment {

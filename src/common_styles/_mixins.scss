@@ -1,0 +1,10 @@
+$breakpoints: (
+  tablet: 768px,
+ 
+) !default;
+
+@mixin mobile-only {
+  @media (max-width: #{map-get($breakpoints, tablet) - 1px}) {
+    @content;
+  }
+}

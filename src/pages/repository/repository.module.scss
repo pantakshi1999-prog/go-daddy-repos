@@ -4,6 +4,10 @@
   padding: 2.4rem;
   height: 100%;
   gap: 2.4rem;
+
+  @include mobile-only {
+    padding: 1rem;
+  }
 }
 
 .headContainer {
@@ -14,10 +18,18 @@
 .stats {
   display: flex;
   gap: 2.4rem;
+
+  @include mobile-only {
+    flex-direction: column;
+  }
 }
 
 .name {
   font-size: 3.2rem;
+
+  @include mobile-only {
+    font-size: 2rem;
+  }
 }
 
 .headingContainer {
@@ -30,6 +42,13 @@
   border-radius: 0.8rem;
   justify-content: space-between;
   align-items: center;
+
+  @include mobile-only {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
 }
 
 .statCard {
@@ -41,6 +60,10 @@
   height: 20rem;
   border-radius: 0.8rem;
   font-size: 10rem;
+
+  @include mobile-only {
+    width: 100%;
+  }
 }
 
 .statCard:nth-child(even) {

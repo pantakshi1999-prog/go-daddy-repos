@@ -15,10 +15,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-          $theme-primary-color: #b7a4e3;
-          $theme-secondary-color: white;
-        `,
+        additionalData: `@import "${path.resolve("src/common_styles/index.scss")}";`,
       },
     },
   },
