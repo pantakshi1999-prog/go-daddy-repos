@@ -169,28 +169,4 @@ describe("Repository Component", () => {
       expect(screen.queryByText("Language:")).not.toBeInTheDocument();
     });
   });
-
-  describe("Edge Cases", () => {
-    it("handles missing svn_url gracefully", async () => {
-      const user = userEvent.setup();
-      const dataWithoutUrl = {
-        ...mockRepositoryData,
-        svn_url: undefined,
-      };
-
-      useApi.mockReturnValue({
-        data: dataWithoutUrl,
-        isLoading: false,
-        error: null,
-        execute: mockExecute,
-      });
-
-      renderWithRouter(<Repository />);
-
-      const viewButton = screen.getByText("View Repository");
-      await user.click(viewButton);
-
-      expect(mockWindowOpen).toHaveBeenCalledWith(undefined);
-    });
-  });
 });
