@@ -51,21 +51,38 @@ function Repository() {
             View Repository
           </button>
         </div>
-        <div className={styles.stats}>
-          <div className={styles.statCard}>
-            <div>{watchers}</div>
-            <div className={styles.statCardSubtext}>Watchers</div>
-          </div>
-          <div className={styles.statCard}>
+              <div className={styles.stats}>
+                { 
+                      watchers && (
+                        <div className={styles.statCard}>
+                          <div>{watchers}</div>
+                          <div className={styles.statCardSubtext}>Watchers</div>
+                        </div>
+                      )
+                  }
+                  { 
+                      forks && (
+                          <div className={styles.statCard}>
             <div>{forks}</div>
             <div className={styles.statCardSubtext}>Forks</div>
           </div>
-          <div className={styles.statCard}>
+                      )
+                  }
+                  { 
+                      open_issues_count && (
+                           <div className={styles.statCard}>
             <div>{open_issues_count}</div>
             <div className={styles.statCardSubtext}>Open Issues</div>
           </div>
-        </div>
-        <div className={styles.languageCard}>Language: {language}</div>
+                      )
+                  }
+              </div>
+              { 
+                  language && (
+                      <div className={styles.languageCard}>Language: {language}</div>
+                  )
+              }
+        
       </div>
     </PageLayout>
   );

@@ -12,7 +12,7 @@ function PageLayout({ error, isLoading, children, onRefetch }) {
     );
   } else if (isLoading) {
     return (
-      <div className={styles.container}>
+      <div className={styles.container} data-testid="loader">
         <div className={styles.loader} />
       </div>
     );
