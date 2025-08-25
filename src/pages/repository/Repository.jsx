@@ -7,6 +7,7 @@ import { useApi } from "@go-daddy-repo/hooks/useApi";
 import PageLayout from "@go-daddy-repo/components/PageLayout";
 
 import styles from "./repository.module.scss";
+import { createStatsData } from "./utils";
 
 function Repository() {
   const { slug } = useParams();
@@ -25,6 +26,8 @@ function Repository() {
     open_issues_count,
     svn_url,
   } = repositoryData || {};
+
+  const statsData = createStatsData(watchers, forks, open_issues_count);
 
   useEffect(() => {
     if (slug) {
@@ -52,24 +55,18 @@ function Repository() {
           </button>
         </div>
         <div className={styles.stats}>
-          {typeof watchers === "number" && (
-            <div className={styles.statCard}>
-              <div>{watchers}</div>
-              <div className={styles.statCardSubtext}>Watchers</div>
-            </div>
-          )}
-          {typeof forks === "number" && (
-            <div className={styles.statCard}>
-              <div>{forks}</div>
-              <div className={styles.statCardSubtext}>Forks</div>
-            </div>
-          )}
-          {typeof open_issues_count === "number" && (
-            <div className={styles.statCard}>
-              <div>{open_issues_count}</div>
-              <div className={styles.statCardSubtext}>Open Issues</div>
-            </div>
-          )}
+          {statsData.map(({ title, value }, index) => {
+            return (
+              <>
+                {typeof value === "number" && (
+                  <div className={styles.statCard} key={index}>
+                    <div>{value}</div>
+                    <div className={styles.statCardSubtext}>{title}</div>
+                  </div>
+                )}
+              </>
+            );
+          })}
         </div>
         {language && (
           <div className={styles.languageCard}>Language: {language}</div>

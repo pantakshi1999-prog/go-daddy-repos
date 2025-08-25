@@ -15,10 +15,13 @@ function RepositoryCard({ forks, watchers, language, name }) {
       onClick={handleRepositoryClick}
       data-testid="repository-card"
     >
-      <div className={styles.cardSegment}>{name || "Not available"}</div>
-      <div className={styles.cardSegment}>{language || "Not available"}</div>
-      <div className={styles.cardSegment}>{forks || "Not available"}</div>
-      <div className={styles.cardSegment}>{watchers || "Not available"}</div>
+      {[name, language, forks, watchers].map((fieldValue, index) => {
+        return (
+          <div className={styles.cardSegment} key={index}>
+            {fieldValue || "Not available"}
+          </div>
+        );
+      })}
     </div>
   );
 }
