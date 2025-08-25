@@ -134,5 +134,3 @@ src/
 
 
 ---
-
-*Built with ❤️ and React*
